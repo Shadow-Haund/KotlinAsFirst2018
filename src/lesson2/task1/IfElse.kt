@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson2.task1
 
 import lesson1.task1.discriminant
@@ -62,7 +63,13 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String = TODO()
+fun ageDescription(age: Int): String {
+    var lastNumAge = age % 10
+    if (lastNumAge == 1 && age !in 11..20 && age !in 111..112) return "$age год"
+    else if (lastNumAge in 2..4 && age !in 11..20 && age !in 111..112) return "$age года"
+    else if (lastNumAge in 5..9 || age in 11..20 || age in 111..112) return "$age лет"
+    else return ""
+}
 
 /**
  * Простая
@@ -73,7 +80,31 @@ fun ageDescription(age: Int): String = TODO()
  */
 fun timeForHalfWay(t1: Double, v1: Double,
                    t2: Double, v2: Double,
-                   t3: Double, v3: Double): Double = TODO()
+                   t3: Double, v3: Double): Double {
+    val s1 = v1 * t1
+    val s2 = v2 * t2
+    val s3 = v3 * t3
+    val SHalf = (s1 + s2 + s3) / 2
+    var THalf = SHalf / v1
+
+    if (THalf <= t1) {
+        return THalf
+    } else {
+        THalf = t1
+    }
+
+    var T2 = (SHalf - s1) / v2
+
+    if (T2 <= t2) {
+        THalf += T2
+        return THalf
+    } else {
+        THalf += t2
+    }
+
+    THalf += ((SHalf - s1 - s2) / v3)
+    return THalf
+}
 
 /**
  * Простая
@@ -86,7 +117,21 @@ fun timeForHalfWay(t1: Double, v1: Double,
  */
 fun whichRookThreatens(kingX: Int, kingY: Int,
                        rookX1: Int, rookY1: Int,
-                       rookX2: Int, rookY2: Int): Int = TODO()
+                       rookX2: Int, rookY2: Int): Int {
+
+    val attackFrom1 = kingX == rookX1 || kingY == rookY1
+    val attackFrom2 = kingX == rookX2 || kingY == rookY2
+    val noReferense = rookX1 != rookX2 && rookY1 != rookY2
+    var attack = 0
+
+    if (attackFrom1 && noReferense) attack = 1
+
+    if (attackFrom2 && noReferense) attack = 2
+
+    if (attackFrom1 && attackFrom2 && noReferense) attack = 3
+
+    return attack
+}
 
 /**
  * Простая
@@ -110,7 +155,24 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    val forA = (b * b + c * c - a * a)
+    val forB = (a * a + c * c - b * b)
+    val forC = (a * a + b * b - c * c)
+    val aExist = b + c > a
+    val bExist = a + c > b
+    val cExist = a + b > c
+
+    if (!cExist || !bExist || !aExist) {
+        return -1
+    } else if (forA > 0.0 && forB > 0.0 && forC > 0.0) {
+        return 0
+    } else if (forA == 0.0 || forB == 0.0 || forC == 0.0) {
+        return 1
+    } else {
+        return 2
+    }
+}
 
 /**
  * Средняя
@@ -120,4 +182,10 @@ fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
+    return if (a in c..d && b in c..d) b - a
+    else if (c in a..b && d in a..b) d - c
+    else if (a in c..d && b !in c..d) d - a
+    else if (a !in c..d && b in c..d) b - c
+    else -1
+}
