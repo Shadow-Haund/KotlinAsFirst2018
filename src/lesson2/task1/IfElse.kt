@@ -3,6 +3,7 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -64,11 +65,11 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
 fun ageDescription(age: Int): String {
-    var lastNumAge = age % 10
-    if (lastNumAge == 1 && age !in 11..20 && age !in 111..112) return "$age год"
-    else if (lastNumAge in 2..4 && age !in 11..20 && age !in 111..112) return "$age года"
-    else if (lastNumAge in 5..9 || age in 11..20 || age in 111..112) return "$age лет"
-    else return ""
+    val lastNumAge = age % 10
+    return if (lastNumAge == 1 && age !in 11..20 && age !in 111..112) "$age год"
+    else if (lastNumAge in 2..4 && age !in 11..20 && age !in 111..112) "$age года"
+    else if (lastNumAge in 5..9 || age in 11..20 || age in 111..112) "$age лет"
+    else ""
 }
 
 /**
@@ -93,7 +94,7 @@ fun timeForHalfWay(t1: Double, v1: Double,
         THalf = t1
     }
 
-    var T2 = (SHalf - s1) / v2
+    val T2 = (SHalf - s1) / v2
 
     if (T2 <= t2) {
         THalf += T2
@@ -121,16 +122,13 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
 
     val attackFrom1 = kingX == rookX1 || kingY == rookY1
     val attackFrom2 = kingX == rookX2 || kingY == rookY2
-    val noReferense = rookX1 != rookX2 && rookY1 != rookY2
-    var attack = 0
+    val noRefer = rookX1 != rookX2 && rookY1 != rookY2
 
-    if (attackFrom1 && noReferense) attack = 1
-
-    if (attackFrom2 && noReferense) attack = 2
-
-    if (attackFrom1 && attackFrom2 && noReferense) attack = 3
-
-    return attack
+    if (!attackFrom1 && !attackFrom2) return 0
+    else if (attackFrom1 && noRefer && !attackFrom2) return 1
+    else if (attackFrom2 && noRefer && !attackFrom1) return 2
+    else if (attackFrom1 && attackFrom2 && noRefer) return 3
+    else return -1
 }
 
 /**
@@ -145,7 +143,16 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
  */
 fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           rookX: Int, rookY: Int,
-                          bishopX: Int, bishopY: Int): Int = TODO()
+                          bishopX: Int, bishopY: Int): Int {
+    val attackFromRook = kingX == rookX || kingY == rookY
+    val attackFormBishop = abs(kingX - bishopX) == abs(kingY - bishopY)
+    val noRefer = (rookX != bishopX && rookY != bishopY) && (abs(rookX - bishopX) != abs(rookY - bishopY))
+    if (!attackFromRook && !attackFormBishop) return 0
+    else if (attackFromRook && noRefer && !attackFormBishop) return 1
+    else if (attackFormBishop && noRefer && !attackFromRook) return 2
+    else if (attackFormBishop && attackFromRook && noRefer) return 3
+    else return -1
+}
 
 /**
  * Простая
