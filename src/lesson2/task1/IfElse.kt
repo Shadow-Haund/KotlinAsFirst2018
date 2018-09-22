@@ -68,7 +68,7 @@ fun ageDescription(age: Int): String {
     val lastNumAge = age % 10
     return if (lastNumAge == 1 && age !in 11..20 && age !in 111..112) "$age год"
     else if (lastNumAge in 2..4 && age !in 11..20 && age !in 111..112) "$age года"
-    else if (lastNumAge in 5..9 || age in 11..20 || age in 111..112) "$age лет"
+    else if (lastNumAge in 5..9 || age in 11..20 || age in 111..112 || lastNumAge == 0) "$age лет"
     else ""
 }
 
