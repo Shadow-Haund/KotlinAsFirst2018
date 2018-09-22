@@ -2,7 +2,8 @@
 
 package lesson1.task1
 
-import kotlin.math.*
+import kotlin.math.PI
+import kotlin.math.sqrt
 
 /**
  * Пример
@@ -125,8 +126,7 @@ fun accountInThreeYears(initial: Int, percent: Int): Double {
     val prec = percent * 0.01
     val first = (initial + initial * prec)
     val second = first + first * prec
-    val third = second + second * prec
-    return third
+    return second + second * prec
 }
 
 /**
@@ -137,9 +137,7 @@ fun accountInThreeYears(initial: Int, percent: Int): Double {
  */
 fun numberRevert(number: Int): Int {
     val num1 = number % 10
-    var num2 = number / 10
-    num2 %= 10
+    val num2 = number / 10 % 10
     val num3 = number / 100
-    val rez = num1 * 100 + num2 * 10 + num3
-    return rez
+    return num1 * 100 + num2 * 10 + num3
 }

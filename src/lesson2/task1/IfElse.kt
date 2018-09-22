@@ -66,10 +66,11 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  */
 fun ageDescription(age: Int): String {
     val lastNumAge = age % 10
-    return if (lastNumAge == 1 && age !in 11..20 && age !in 111..112) "$age год"
-    else if (lastNumAge in 2..4 && age !in 11..20 && age !in 111..112) "$age года"
-    else if (lastNumAge in 5..9 || age in 11..20 || age in 111..112 || lastNumAge == 0) "$age лет"
-    else ""
+    return when {
+        lastNumAge == 1 && age !in 10..20 && age !in 111..114 -> "$age год"
+        lastNumAge in 2..4 && age !in 10..20 && age !in 111..114 -> "$age года"
+        else -> "$age лет"
+    }
 }
 
 /**
@@ -85,26 +86,26 @@ fun timeForHalfWay(t1: Double, v1: Double,
     val s1 = v1 * t1
     val s2 = v2 * t2
     val s3 = v3 * t3
-    val SHalf = (s1 + s2 + s3) / 2
-    var THalf = SHalf / v1
+    val sHalf = (s1 + s2 + s3) / 2
+    var tHalf = sHalf / v1
 
-    if (THalf <= t1) {
-        return THalf
+    if (tHalf <= t1) {
+        return tHalf
     } else {
-        THalf = t1
+        tHalf = t1
     }
 
-    val T2 = (SHalf - s1) / v2
+    val T2 = (sHalf - s1) / v2
 
     if (T2 <= t2) {
-        THalf += T2
-        return THalf
+        tHalf += T2
+        return tHalf
     } else {
-        THalf += t2
+        tHalf += t2
     }
 
-    THalf += ((SHalf - s1 - s2) / v3)
-    return THalf
+    tHalf += ((sHalf - s1 - s2) / v3)
+    return tHalf
 }
 
 /**
@@ -122,13 +123,14 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
 
     val attackFrom1 = kingX == rookX1 || kingY == rookY1
     val attackFrom2 = kingX == rookX2 || kingY == rookY2
-    val noRefer = rookX1 != rookX2 && rookY1 != rookY2
 
-    if (!attackFrom1 && !attackFrom2) return 0
-    else if (attackFrom1 && noRefer && !attackFrom2) return 1
-    else if (attackFrom2 && noRefer && !attackFrom1) return 2
-    else if (attackFrom1 && attackFrom2 && noRefer) return 3
-    else return -1
+    return when {
+        (!attackFrom1 && !attackFrom2) -> 0
+        (attackFrom1 && !attackFrom2) -> 1
+        (attackFrom2 && !attackFrom1) -> 2
+        (attackFrom1 && attackFrom2) -> 3
+        else -> -1
+    }
 }
 
 /**
@@ -146,12 +148,13 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           bishopX: Int, bishopY: Int): Int {
     val attackFromRook = kingX == rookX || kingY == rookY
     val attackFormBishop = abs(kingX - bishopX) == abs(kingY - bishopY)
-    val noRefer = (rookX != bishopX && rookY != bishopY) && (abs(rookX - bishopX) != abs(rookY - bishopY))
-    if (!attackFromRook && !attackFormBishop) return 0
-    else if (attackFromRook && noRefer && !attackFormBishop) return 1
-    else if (attackFormBishop && noRefer && !attackFromRook) return 2
-    else if (attackFormBishop && attackFromRook && noRefer) return 3
-    else return -1
+    return when{
+        (!attackFromRook && !attackFormBishop) -> 0
+        (attackFromRook && !attackFormBishop) -> 1
+        (attackFormBishop && !attackFromRook) -> 2
+        (attackFormBishop && attackFromRook) -> 3
+        else -> -1
+    }
 }
 
 /**
@@ -170,14 +173,11 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     val bExist = a + c > b
     val cExist = a + b > c
 
-    if (!cExist || !bExist || !aExist) {
-        return -1
-    } else if (forA > 0.0 && forB > 0.0 && forC > 0.0) {
-        return 0
-    } else if (forA == 0.0 || forB == 0.0 || forC == 0.0) {
-        return 1
-    } else {
-        return 2
+    return when {
+        (!cExist || !bExist || !aExist) -> -1
+        (forA > 0.0 && forB > 0.0 && forC > 0.0) -> 0
+        (forA == 0.0 || forB == 0.0 || forC == 0.0) -> 1
+        else -> 2
     }
 }
 
