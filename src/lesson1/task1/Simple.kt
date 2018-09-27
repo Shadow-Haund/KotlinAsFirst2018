@@ -79,7 +79,7 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double = (sagenes
  */
 fun angleInRadian(grad: Int, min: Int, sec: Int): Double {
     val gradToRad = PI / 180
-    val minToRad = gradToRad /  60
+    val minToRad = gradToRad / 60
     val secToRad: Double = minToRad / 60
     return grad * gradToRad + min * minToRad + sec * secToRad
 }
@@ -112,8 +112,7 @@ fun thirdDigit(number: Int): Int = number / 100 % 10
  * прибыл на станцию назначения в h2 часов m2 минут того же дня (например в 13:01).
  * Определите время поезда в пути в минутах (в данном случае 216).
  */
-fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minutesArrive: Int): Int
-        = (hoursArrive - hoursDepart) * 60 + minutesArrive - minutesDepart
+fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minutesArrive: Int): Int = (hoursArrive - hoursDepart) * 60 + minutesArrive - minutesDepart
 
 /**
  * Простая
@@ -122,12 +121,7 @@ fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minute
  * Сколько денег будет на счету через 3 года (с учётом сложных процентов)?
  * Например, 100 рублей под 10% годовых превратятся в 133.1 рубля
  */
-fun accountInThreeYears(initial: Int, percent: Int): Double {
-    val prec = percent * 0.01
-    val first = (initial + initial * prec)
-    val second = first + first * prec
-    return second + second * prec
-}
+fun accountInThreeYears(initial: Int, percent: Int) = initial * (Math.pow((1 + percent.toDouble() / 100), 3.0))
 
 /**
  * Простая

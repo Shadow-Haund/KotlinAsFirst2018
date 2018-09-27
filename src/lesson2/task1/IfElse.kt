@@ -95,10 +95,10 @@ fun timeForHalfWay(t1: Double, v1: Double,
         tHalf = t1
     }
 
-    val T2 = (sHalf - s1) / v2
+    val time2 = (sHalf - s1) / v2
 
-    if (T2 <= t2) {
-        tHalf += T2
+    if (time2 <= t2) {
+        tHalf += time2
         return tHalf
     } else {
         tHalf += t2
@@ -125,11 +125,10 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
     val attackFrom2 = kingX == rookX2 || kingY == rookY2
 
     return when {
-        (!attackFrom1 && !attackFrom2) -> 0
         (attackFrom1 && !attackFrom2) -> 1
         (attackFrom2 && !attackFrom1) -> 2
         (attackFrom1 && attackFrom2) -> 3
-        else -> -1
+        else -> 0
     }
 }
 
@@ -149,11 +148,10 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
     val attackFromRook = kingX == rookX || kingY == rookY
     val attackFormBishop = abs(kingX - bishopX) == abs(kingY - bishopY)
     return when{
-        (!attackFromRook && !attackFormBishop) -> 0
         (attackFromRook && !attackFormBishop) -> 1
         (attackFormBishop && !attackFromRook) -> 2
         (attackFormBishop && attackFromRook) -> 3
-        else -> -1
+        else -> 0
     }
 }
 
