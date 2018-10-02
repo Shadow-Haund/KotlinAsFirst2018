@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson3.task1
 
 import kotlin.math.sqrt
@@ -38,7 +39,7 @@ fun isPrime(n: Int): Boolean {
  */
 fun isPerfect(n: Int): Boolean {
     var sum = 1
-    for (m in 2..n/2) {
+    for (m in 2..n / 2) {
         if (n % m > 0) continue
         sum += m
         if (sum > n) break
@@ -66,7 +67,16 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun digitNumber(n: Int): Int = TODO()
+fun digitNumber(n: Int): Int {
+    var number = n
+    var count = 1
+    if (number < 10) return 1
+    while (number > 9) {
+        ++count
+        number /= 10
+    }
+    return count
+}
 
 /**
  * Простая
@@ -82,21 +92,45 @@ fun fib(n: Int): Int = TODO()
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int = TODO()
+fun lcm(m: Int, n: Int): Int {
+    var mForNod = m
+    var nForNod = n
+    while (mForNod != 0 && nForNod != 0) {
+        if (mForNod > nForNod) mForNod %= nForNod
+        else nForNod %= mForNod
+    }
+    return m * n / (nForNod + mForNod)
+}
 
 /**
  * Простая
  *
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
-fun minDivisor(n: Int): Int = TODO()
+fun minDivisor(n: Int): Int {
+    var def = 2
+    when {
+        (n == def) -> return def
+        (n % def == 0) -> return def
+        else -> while (n % def != 0) ++def
+    }
+    return def
+}
+
 
 /**
  * Простая
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int = TODO()
+fun maxDivisor(n: Int): Int {
+    var def = n / 2
+    when {
+        (n % def == 0) -> return def
+        else -> while (n % def != 0) --def
+    }
+    return def
+}
 
 /**
  * Простая
@@ -132,7 +166,22 @@ fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int = TODO()
+fun collatzSteps(x: Int): Int {
+    var numOfIteratiom = 0
+    var x = x
+    while (x != 1) when {
+        (x % 2 == 0) -> {
+            x /= 2
+            numOfIteratiom += 1
+        }
+        else -> {
+            x = x * 3 + 1
+            numOfIteratiom += 1
+        }
+    }
+    return numOfIteratiom
+}
+
 
 /**
  * Средняя
@@ -184,7 +233,7 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
 
 /**
  * Сложная
- *
+ **
  * Найти n-ю цифру последовательности из квадратов целых чисел:
  * 149162536496481100121144...
  * Например, 2-я цифра равна 4, 7-я 5, 12-я 6.
