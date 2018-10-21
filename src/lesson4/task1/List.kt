@@ -159,9 +159,9 @@ fun times(a: List<Double>, b: List<Double>): Double {
     return if (a.isEmpty()) 0.0
     else {
         for (i in 0 until a.size) {
-            var i = i
-            element += list[i] * list[i + a.size]
-            ++i
+            var index = i
+            element += list[index] * list[index + a.size]
+            ++index
         }
         element
     }
@@ -220,8 +220,7 @@ fun factorize(n: Int): List<Int> {
         else if (n1 % del == 0) {
             list.add((del))
             n1 /= del
-        }
-        else ++del
+        } else ++del
     }
     return list.sorted()
 }
@@ -233,7 +232,7 @@ fun factorize(n: Int): List<Int> {
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String = factorize(n).joinToString (separator = "*")
+fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*")
 
 /**
  * Средняя
@@ -242,7 +241,18 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString (separator = "
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int> = TODO()
+fun convert(n: Int, base: Int): List<Int> {
+    var remainder: Int
+    val rez = mutableListOf<Int>()
+    var num = n
+    if (n == 0) return listOf(0)
+    while (num > 0) {
+        remainder = num % base
+        num /= base
+        rez.add(remainder)
+    }
+    return rez.reversed()
+}
 
 /**
  * Сложная
@@ -252,7 +262,18 @@ fun convert(n: Int, base: Int): List<Int> = TODO()
  * строчными буквами: 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
-fun convertToString(n: Int, base: Int): String = TODO()
+fun convertToString(n: Int, base: Int): String {
+    val rez = mutableListOf<String>()
+    var num = n
+    val listOfNum = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
+    if (n == 0) return "0"
+    while (num > 0) {
+        val remainder = listOfNum[num % base]
+        num /= base
+        rez.add(remainder)
+    }
+    return rez.joinToString(separator = "").reversed()
+}
 
 /**
  * Средняя
@@ -282,7 +303,75 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val resultList = mutableListOf<String>()
+    var n1 = n
+    while (n1 > 999) {
+        resultList.add("M")
+        n1 -= 1000
+    }
+    while (n1 in 100..999) {
+        when {
+            n1 / 100 % 10 == 9 -> {
+                resultList.add("CM")
+                n1 -= 900
+            }
+            n1 / 100 % 10 in 5..8 -> {
+                resultList.add("D")
+                n1 -= 500
+            }
+            n1 / 100 % 10 == 4 -> {
+                resultList.add("CD")
+                n1 -= 400
+            }
+            n1 / 100 % 10 in 1..3 -> {
+                resultList.add("C")
+                n1 -= 100
+            }
+        }
+    }
+    while (n1 in 10..99) {
+        when {
+            n1 / 10 % 10 == 9 -> {
+                resultList.add("XC")
+                n1 -= 90
+            }
+            n1 / 10 % 10 in 5..8 -> {
+                resultList.add("L")
+                n1 -= 50
+            }
+            n1 / 10 % 10 == 4 -> {
+                resultList.add("XL")
+                n1 -= 40
+            }
+            n1 / 10 % 10 in 1..3 -> {
+                resultList.add("X")
+                n1 -= 10
+            }
+        }
+    }
+    while (n1 in 1..9) {
+        when {
+            n1 % 10 == 9 -> {
+                resultList.add("IX")
+                n1 -= 9
+            }
+            n1 % 10 in 5..8 -> {
+                resultList.add("V")
+                n1 -= 5
+            }
+            n1 % 10 == 4 -> {
+                resultList.add("IV")
+                n1 -= 4
+            }
+            n1 % 10 in 1..3 -> {
+                resultList.add("I")
+                n1 -= 1
+            }
+        }
+    }
+    return resultList.joinToString(separator = "")
+}
 
 /**
  * Очень сложная
