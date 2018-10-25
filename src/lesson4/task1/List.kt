@@ -122,10 +122,7 @@ fun abs(v: List<Double>): Double = v.fold(0.0) { privy, next -> sqrt(privy * pri
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double {
-    return if (list.isEmpty()) 0.0
-    else list.sum() / list.size
-}
+fun mean(list: List<Double>): Double = list.sum() / list.size
 
 /**
  * Средняя
@@ -235,12 +232,11 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
 fun convert(n: Int, base: Int): List<Int> {
-    var remainder: Int
     val rez = mutableListOf<Int>()
     var num = n
     if (n == 0) return listOf(0)
     while (num > 0) {
-        remainder = num % base
+        val remainder = num % base
         num /= base
         rez.add(remainder)
     }
@@ -256,7 +252,8 @@ fun convert(n: Int, base: Int): List<Int> {
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
 //convert().map{_e}.joinToString
-fun convertToString(n: Int, base: Int): String = convert(n, base).map { if (it > 9) (it - 10 + 'a'.toInt()).toChar() else it }.joinToString(separator = "")
+fun convertToString(n: Int, base: Int): String =
+        convert(n, base).map { if (it > 9) (it - 10 + 'a'.toInt()).toChar() else it }.joinToString(separator = "")
 
 /**
  * Средняя
