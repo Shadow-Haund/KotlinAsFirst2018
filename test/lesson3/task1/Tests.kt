@@ -213,9 +213,9 @@ class Tests {
     @Test
     @Tag("Normal")
     fun hasDifferentDigits() {
+        assertTrue(hasDifferentDigits(222266666))
         assertTrue(hasDifferentDigits(323))
         assertTrue(hasDifferentDigits(54))
-        assertTrue(hasDifferentDigits(222266666))
         assertFalse(hasDifferentDigits(0))
         assertFalse(hasDifferentDigits(777))
     }

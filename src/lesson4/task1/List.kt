@@ -115,10 +115,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double {
-    return if (v.isEmpty()) 0.0
-    else v.fold(0.0) { privy, next -> sqrt(privy * privy + next * next) }
-}
+fun abs(v: List<Double>): Double = v.fold(0.0) { privy, next -> sqrt(privy * privy + next * next) }
 
 /**
  * Простая
@@ -156,15 +153,12 @@ fun center(list: MutableList<Double>): MutableList<Double> {
 fun times(a: List<Double>, b: List<Double>): Double {
     val list = a + b
     var element = 0.0
-    return if (a.isEmpty()) 0.0
-    else {
-        for (i in 0 until a.size) {
-            var index = i
-            element += list[index] * list[index + a.size]
-            ++index
-        }
-        element
+    for (i in 0 until a.size) {
+        var index = i
+        element += list[index] * list[index + a.size]
+        ++index
     }
+    return element
 }
 
 
@@ -179,7 +173,6 @@ fun times(a: List<Double>, b: List<Double>): Double {
 fun polynom(p: List<Double>, x: Double): Double {
     var exponent = 0.0
     var rez = 0.0
-    if (p.isEmpty()) return 0.0
     for (i in 0 until p.size) {
         rez += p[i] * Math.pow(x, exponent)
         ++exponent
@@ -262,18 +255,8 @@ fun convert(n: Int, base: Int): List<Int> {
  * строчными буквами: 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
-fun convertToString(n: Int, base: Int): String {
-    val rez = mutableListOf<String>()
-    var num = n
-    val listOfNum = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
-    if (n == 0) return "0"
-    while (num > 0) {
-        val remainder = listOfNum[num % base]
-        num /= base
-        rez.add(remainder)
-    }
-    return rez.joinToString(separator = "").reversed()
-}
+//convert().map{_e}.joinToString
+fun convertToString(n: Int, base: Int): String = convert(n, base).map { if (it > 9) (it - 10 + 'a'.toInt()).toChar() else it }.joinToString(separator = "")
 
 /**
  * Средняя
