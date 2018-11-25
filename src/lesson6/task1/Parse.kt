@@ -49,12 +49,10 @@ fun main(args: Array<String>) {
         val seconds = timeStrToSeconds(line)
         if (seconds == -1) {
             println("Введённая строка $line не соответствует формату ЧЧ:ММ:СС")
-        }
-        else {
+        } else {
             println("Прошло секунд с начала суток: $seconds")
         }
-    }
-    else {
+    } else {
         println("Достигнут <конец файла> в процессе чтения строки. Программа прервана")
     }
 }
@@ -71,8 +69,68 @@ fun main(args: Array<String>) {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun daysInMonth(month: Int, year: Int): Int {
+    val yearV = (year % 4 == 0) && (year % 100 != 0) && (year % 400 != 0)
+    val yearVZero = (year % 4 == 0) && (year % 100 == 0) && (year % 400 == 0)
+    return when {
+        (yearV && month == 2) -> 29
+        (yearVZero && month == 2) -> 29
+        (!yearV && month == 2) -> 28
+        (month in 1..7 step 2 || month in 8..12 step 2) -> 31
+        else -> 30
+    }
+}
 
+fun dateStrToDigit(str: String): String {
+    try {
+        val list = str.split(" ")
+        val month = when (list[1]) {
+            "января" -> "01"
+            "февраля" -> "02"
+            "марта" -> "03"
+            "апреля" -> "04"
+            "мая" -> "05"
+            "июня" -> "06"
+            "июля" -> "07"
+            "августа" -> "08"
+            "сентября" -> "09"
+            "октября" -> "10"
+            "ноября" -> "11"
+            "декабря" -> "12"
+            else -> ""
+        }
+        val year = list.last().toInt()
+        val day = list.first().toInt()
+        if (day !in 1..daysInMonth(month.toInt(), year)) return ""
+        return String.format("%02d.%02d.%4d", day, month.toInt(), year)
+    } catch (e: Exception) {
+        return ""
+    }
+}
+/*
+    try {
+        val list = str.split(" ")
+        val month = "янвфевмарапрмайиюниюлавгсеноктноядек"
+        val numOfMounth = month.indexOf(list[1].substring(0, 3)) / 3 + 1
+        val year = list.last().toInt()
+        val day = list.first().toInt()
+        if (day !in 1..daysInMonth(numOfMounth, year)) return ""
+        return String.format("%02d.%02d.%d", day, numOfMounth, year)
+    } catch (e: Exception) {
+        return ""
+    }
+
+
+ if (!Regex("\\d(1,2) [а-я]+ \\d+").matches(str)) return ""
+    val list = str.split(" ")
+    val month = "янвфевмарапрмайиюниюлавгсеноктноядек"
+    val numOfMounth = month.indexOf(list[1].substring(0, 3)) / 3 + 1
+    val yaer = list.last().toInt()
+    val day = list.first().toInt()
+    if (day !in 1..daysInMonth(numOfMounth, yaer)) return ""
+    return String.format("%02d.%02d.%d", day, numOfMounth, yaer)
+}
+}*/
 /**
  * Средняя
  *
@@ -83,7 +141,32 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    try {
+        val list = digital.split(" ")
+        val month = when (list[1]) {
+            "01" -> "января"
+            "02" -> "февраля"
+            "03" -> "марта"
+            "04" -> "апреля"
+            "05" -> "мая"
+            "06" -> "июня"
+            "07" -> "июля"
+            "08" -> "августа"
+            "09" -> "сентября"
+            "10" -> "октября"
+            "11" -> "ноября"
+            "12" -> "декабря"
+            else -> ""
+        }
+        val year = list.last().toInt()
+        val day = list.first().toInt()
+        if (day !in 1..daysInMonth(month.toInt(), year)) return ""
+        return String.format("%02d.%02d.%4d", day, month, year)
+    } catch (e: Exception) {
+        return ""
+    }
+}
 
 /**
  * Средняя
@@ -97,7 +180,12 @@ fun dateDigitToStr(digital: String): String = TODO()
  * Все символы в номере, кроме цифр, пробелов и +-(), считать недопустимыми.
  * При неверном формате вернуть пустую строку
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    val number = phone.replace(Regex("""[\-|\s]"""), "")
+    if (Regex("""\+?\d+\(\d+\)\d+|""").matches(number))
+        return phone.replace(Regex("""[\-\(\)\s]"""), "")
+    else return ""
+}
 
 /**
  * Средняя
@@ -109,8 +197,17 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
-
+fun bestLongJump(jumps: String): Int {
+    val splitPart = jumps.split(Regex(""" +"""))
+    var rez = -1
+    for (part in splitPart) {
+        if (!part.contains(Regex("[-%]|[0-9]"))) return -1 // спросить почему не работает (Regex("""[-%]|\d""")))?
+        if (part.toIntOrNull() != null) {
+            if (part.toInt() > rez) rez = part.toInt()
+        }
+    }
+    return rez
+}
 /**
  * Сложная
  *
@@ -133,6 +230,12 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int = TODO()
+/*{
+    if (!Regex("\\d ([+-] \\d)+").matches(expression)) throw IllegalAccessException()
+    val list = expression.split(" ")
+    val ans = list.first().toInt()
+}*/
+
 
 /**
  * Сложная
