@@ -102,7 +102,7 @@ fun dateStrToDigit(str: String): String {
         val year = list.last().toInt()
         val day = list.first().toInt()
         if (day !in 1..daysInMonth(month.toInt(), year)) return ""
-        return String.format("%02d.%02d.%4d", day, month.toInt(), year)
+        return String.format("%02d.%02d.%d", day, month.toInt(), year)
     } catch (e: Exception) {
         return ""
     }
@@ -143,7 +143,8 @@ fun dateStrToDigit(str: String): String {
  */
 fun dateDigitToStr(digital: String): String {
     try {
-        val list = digital.split(" ")
+        val list = digital.split(".")
+        val monthNum = list[1].toInt()
         val month = when (list[1]) {
             "01" -> "января"
             "02" -> "февраля"
@@ -161,8 +162,8 @@ fun dateDigitToStr(digital: String): String {
         }
         val year = list.last().toInt()
         val day = list.first().toInt()
-        if (day !in 1..daysInMonth(month.toInt(), year)) return ""
-        return String.format("%02d.%02d.%4d", day, month, year)
+        if (day !in 1..daysInMonth(monthNum, year) || list.size != 3 || monthNum !in 1..12) return ""
+        return String.format("%2d %s %4d", day, month, year).trim()
     } catch (e: Exception) {
         return ""
     }
@@ -181,8 +182,8 @@ fun dateDigitToStr(digital: String): String {
  * При неверном формате вернуть пустую строку
  */
 fun flattenPhoneNumber(phone: String): String {
-    val number = phone.replace(Regex("""[\-|\s]"""), "")
-    if (Regex("""\+?\d+\(\d+\)\d+|""").matches(number))
+    val phNum = phone.replace(Regex("""[\-|\s]"""), "")
+    return if (Regex("""\+?\d+\(\d+\)\d+|\d+""").matches(phNum))
         return phone.replace(Regex("""[\-\(\)\s]"""), "")
     else return ""
 }
@@ -201,10 +202,10 @@ fun bestLongJump(jumps: String): Int {
     val splitPart = jumps.split(Regex(""" +"""))
     var rez = -1
     for (part in splitPart) {
-        if (!part.contains(Regex("[-%]|[0-9]"))) return -1 // спросить почему не работает (Regex("""[-%]|\d""")))?
         if (part.toIntOrNull() != null) {
             if (part.toInt() > rez) rez = part.toInt()
         }
+        if (!part.contains(Regex("[-%]|[0-9]"))) return -1 // спросить почему не работает (Regex("""[-%]|\d""")))?
     }
     return rez
 }

@@ -128,6 +128,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
     for ((key, value) in b) {
         if (a.containsKey(key) && value == a[key]) return true
+        if (a.isEmpty() && b.isNotEmpty()) return false
     }
     return false
 }
