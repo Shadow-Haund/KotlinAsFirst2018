@@ -127,10 +127,9 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
     for ((key, value) in b) {
-        if (a.containsKey(key) && value == a[key]) return true
-        if (a.isEmpty() && b.isNotEmpty()) return false
+        if (((a.containsKey(key) && b[key] != a[key]))) return false
     }
-    return false
+    return true
 }
 
 /**
@@ -235,10 +234,8 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
  */
 fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
     val rez = mutableListOf<String>()
-    for (i in 0 until a.size) {
-        if (a[i] == b[i]) rez.add(a[i])
-    }
-    return rez
+    for (value in a) if (value in b) rez.add(value)
+    return rez.toList()
 }
 
 /**
@@ -251,7 +248,7 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    word.forEach { it -> if (it.toLowerCase() !in chars) return false }
+    word.toLowerCase().toSet().forEach { it -> if (!chars.map { itS -> itS.toLowerCase() }.contains(it)) return false }
     return true
 }
 
@@ -303,31 +300,27 @@ fun hasAnagrams(words: List<String>): Boolean = TODO()
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    for (i in 0..list.size - 1) {
-        for (j in 0..list.size - 1)
-            if (list[i] + list[j] == number && i != j) return Pair(i, j)
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> { // спросить как из map вывести ключ лоя конкретного значения
+    val mList = list.toMutableList()
+    for (elem in list) {
+        val elemVal = number - elem
+        if (elemVal in mList && elem != elemVal)
+            return Pair(mList.indexOf(elem), mList.indexOf(elemVal))
     }
     return Pair(-1, -1)
-
 }
-/*    if (list.isEmpty()) return Pair(-1, -1)
-    for (i in -1 until list.size - 1) {
-        var iv = i
-        while (iv <= list.size) {
-            iv += 1
-            for (j in 0 until list.size) {
-                var jv = j
-                while (jv <= list.size - 1) {
-                    jv += 1
-                    if (jv <= list.size - 1) {
-                        if ((list[iv] + list[jv]) == number && iv != jv) return Pair(iv, jv)
-                    }
-                }
-            }
-        }
+/*
+val mList = list.toMutableList()
+    val mMap = mutableMapOf<Int, Int>()
+    for (i in 0 until mList.size)
+        mMap[i] = mList[i]
+    for (elem in list) {
+        val elemVal = number - elem
+        if (mMap.containsValue(elemVal))
+            return Pair(mMap., mMap.getValue(elemVal))
     }
-    return Pair(-1, -1)*/
+    return Pair(-1, -1)
+*/
 /**
  * Очень сложная
  *

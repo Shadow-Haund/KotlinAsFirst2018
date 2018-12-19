@@ -155,6 +155,7 @@ class Tests {
     fun containsIn() {
         assertTrue(containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")))
         assertFalse(containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")))
+        assertTrue(containsIn(mapOf(), mapOf()))
     }
 
     @Test
@@ -258,6 +259,10 @@ class Tests {
                 emptyList<String>(),
                 whoAreInBoth(listOf("Marat", "Mikhail"), listOf("Sveta", "Kirill"))
         )
+        assertEquals(
+                emptyList<String>(),
+                whoAreInBoth(listOf("Marat", "Mikhail"), listOf())
+        )
     }
 
     @Test
@@ -266,7 +271,8 @@ class Tests {
         assertFalse(canBuildFrom(emptyList(), "foo"))
         assertTrue(canBuildFrom(listOf('a', 'b', 'o'), "baobab"))
         assertFalse(canBuildFrom(listOf('a', 'm', 'r'), "Marat"))
-        assertFalse(canBuildFrom(listOf('M'), "M"))
+        assertTrue(canBuildFrom(listOf('M'), "M"))
+        assertTrue(canBuildFrom(listOf('H'), "h"))
     }
 
     @Test

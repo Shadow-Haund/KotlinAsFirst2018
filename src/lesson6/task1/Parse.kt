@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+
 /**
  * Пример
  *
@@ -69,17 +71,6 @@ fun main(args: Array<String>) {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun daysInMonth(month: Int, year: Int): Int {
-    val yearV = (year % 4 == 0) && (year % 100 != 0) && (year % 400 != 0)
-    val yearVZero = (year % 4 == 0) && (year % 100 == 0) && (year % 400 == 0)
-    return when {
-        (yearV && month == 2) -> 29
-        (yearVZero && month == 2) -> 29
-        (!yearV && month == 2) -> 28
-        (month in 1..7 step 2 || month in 8..12 step 2) -> 31
-        else -> 30
-    }
-}
 
 fun dateStrToDigit(str: String): String {
     try {
@@ -103,34 +94,13 @@ fun dateStrToDigit(str: String): String {
         val day = list.first().toInt()
         if (day !in 1..daysInMonth(month.toInt(), year)) return ""
         return String.format("%02d.%02d.%d", day, month.toInt(), year)
-    } catch (e: Exception) {
+    } catch (e: NumberFormatException) {
+        return ""
+    } catch (f: IndexOutOfBoundsException) {
         return ""
     }
 }
-/*
-    try {
-        val list = str.split(" ")
-        val month = "янвфевмарапрмайиюниюлавгсеноктноядек"
-        val numOfMounth = month.indexOf(list[1].substring(0, 3)) / 3 + 1
-        val year = list.last().toInt()
-        val day = list.first().toInt()
-        if (day !in 1..daysInMonth(numOfMounth, year)) return ""
-        return String.format("%02d.%02d.%d", day, numOfMounth, year)
-    } catch (e: Exception) {
-        return ""
-    }
 
-
- if (!Regex("\\d(1,2) [а-я]+ \\d+").matches(str)) return ""
-    val list = str.split(" ")
-    val month = "янвфевмарапрмайиюниюлавгсеноктноядек"
-    val numOfMounth = month.indexOf(list[1].substring(0, 3)) / 3 + 1
-    val yaer = list.last().toInt()
-    val day = list.first().toInt()
-    if (day !in 1..daysInMonth(numOfMounth, yaer)) return ""
-    return String.format("%02d.%02d.%d", day, numOfMounth, yaer)
-}
-}*/
 /**
  * Средняя
  *
@@ -164,7 +134,7 @@ fun dateDigitToStr(digital: String): String {
         val day = list.first().toInt()
         if (day !in 1..daysInMonth(monthNum, year) || list.size != 3 || monthNum !in 1..12) return ""
         return String.format("%2d %s %4d", day, month, year).trim()
-    } catch (e: Exception) {
+    } catch (e: java.lang.NumberFormatException) {
         return ""
     }
 }
@@ -182,10 +152,10 @@ fun dateDigitToStr(digital: String): String {
  * При неверном формате вернуть пустую строку
  */
 fun flattenPhoneNumber(phone: String): String {
-    val phNum = phone.replace(Regex("""[\-|\s]"""), "")
+    val phNum = phone.replace(Regex("""[\-\s]"""), "")
     return if (Regex("""\+?\d+\(\d+\)\d+|\d+""").matches(phNum))
-        return phone.replace(Regex("""[\-\(\)\s]"""), "")
-    else return ""
+        phNum.replace(Regex("""[()]"""), "")
+    else ""
 }
 
 /**
@@ -201,14 +171,15 @@ fun flattenPhoneNumber(phone: String): String {
 fun bestLongJump(jumps: String): Int {
     val splitPart = jumps.split(Regex(""" +"""))
     var rez = -1
-    for (part in splitPart) {
-        if (part.toIntOrNull() != null) {
-            if (part.toInt() > rez) rez = part.toInt()
+    for (i in 0 until splitPart.size) {
+        if (splitPart[i].toIntOrNull() != null) {
+            if (splitPart[i].matches(Regex("""[\d]+""")) && splitPart[i].toInt() > rez) rez = splitPart[i].toInt()
         }
-        if (!part.contains(Regex("[-%]|[0-9]"))) return -1 // спросить почему не работает (Regex("""[-%]|\d""")))?
+        if (!splitPart[i].contains(Regex("[-%]|[0-9]"))) return -1
     }
     return rez
 }
+
 /**
  * Сложная
  *
@@ -219,7 +190,15 @@ fun bestLongJump(jumps: String): Int {
  * Прочитать строку и вернуть максимальную взятую высоту (230 в примере).
  * При нарушении формата входной строки вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    var str = jumps.split("")
+    var rez = -1
+    for (i in 0 until str.size) {
+        if (str[i].matches(Regex("""\a?\d+\a?""")) && str[i + 1].matches(Regex("[+]")))
+            rez = str[i].toInt()
+    }
+    return rez
+}
 
 /**
  * Сложная
@@ -230,13 +209,19 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
-/*{
-    if (!Regex("\\d ([+-] \\d)+").matches(expression)) throw IllegalAccessException()
-    val list = expression.split(" ")
-    val ans = list.first().toInt()
-}*/
-
+fun plusMinus(expression: String): Int {
+    if (expression.matches(Regex("""\d+( [+-] \d+)*"""))) {
+        val str = expression.split(" ")
+        var rez = str[0].toInt()
+        for (i in 1 until str.size step 2) {
+            when (str[i]) {
+                "+" -> rez += str[i + 1].toInt()
+                "-" -> rez -= str[i + 1].toInt()
+            }
+        }
+        return rez
+    } else throw IllegalArgumentException()
+}
 
 /**
  * Сложная
@@ -260,7 +245,16 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше либо равны нуля.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    if (description.matches(Regex("""[а-яёА-ЯЁ]+ \d+\.\d?(; [а-яёА-ЯЁ]+ \d+\.\d?)*"""))) {
+        val str = description.replace(Regex("[;]"), "").split(" ")
+        var rez = str[0]
+        for (i in 1 until str.size) {
+            if (str[i].toInt() < str[i + 2].toInt()) rez = str[i + 1]
+        }
+        return rez
+    } else return ""
+}
 
 /**
  * Сложная
