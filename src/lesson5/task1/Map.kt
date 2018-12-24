@@ -300,8 +300,8 @@ fun hasAnagrams(words: List<String>): Boolean = TODO()
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> { // спросить как из map вывести ключ лоя конкретного значения
-    val mList = list.toMutableList()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> { // спросить как из map вывести ключ для конкретного значения
+    val mList = list
     for (elem in list) {
         val elemVal = number - elem
         if (elemVal in mList && elem != elemVal)
@@ -323,7 +323,6 @@ val mList = list.toMutableList()
 */
 /**
  * Очень сложная
- *
  * Входными данными является ассоциативный массив
  * "название сокровища"-"пара (вес сокровища, цена сокровища)"
  * и вместимость вашего рюкзака.

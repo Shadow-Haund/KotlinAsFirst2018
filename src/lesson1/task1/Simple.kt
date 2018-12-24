@@ -54,6 +54,7 @@ fun main(args: Array<String>) {
     println("Root product: $x1x2")
 }
 
+
 /**
  * Тривиальная
  *

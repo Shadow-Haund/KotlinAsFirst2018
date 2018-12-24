@@ -229,7 +229,17 @@ fun isPalindrome(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var n = n
+    var n1 = n % 10
+    var n2 = n / 10 % 10
+    if (n in -9..9) return false
+    while (n1 == n2) {
+        n /= 10
+        if (n1 != n2) return true
+    }
+    return false
+}
 
 /**
  * Сложная
