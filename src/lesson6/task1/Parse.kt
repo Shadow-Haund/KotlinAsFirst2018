@@ -194,7 +194,7 @@ fun bestHighJump(jumps: String): Int {
     val str = jumps.split(" ")
     var rez = -1
     for (i in 0 until str.size) {
-        if (str[i].matches(Regex("""\a?\d+\a?""")) && str[i + 1].matches(Regex("[+]")) && str[i].toInt() > rez)
+        if (str[i].matches(Regex("""\a?\d+\a?""")) && str[i + 1].matches(Regex("""\%?\+\%?""")) && str[i].toInt() > rez)
             rez = str[i].toInt()
     }
     return rez
@@ -246,18 +246,18 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * Все цены должны быть больше либо равны нуля.
  */
 fun mostExpensive(description: String): String {
-    if (description.matches(Regex("""[а-яёА-ЯЁ]+ \d+\.\d?(; [а-яёА-ЯЁ]+ \d+\.\d?)*"""))) {
-        val str = description.replace(Regex("[;]"), "").split(" ")
-        var rez = str[0]
-        var maxVal = 0.0
-        for (i in 1 until str.size step 2) {
-            if (maxVal < str[i].toDouble()) {
-                rez = str[i - 1]
-                maxVal = str[i].toDouble()
-            }
+    if (!Regex("""(?:\S+ \d+(?:\.\d+)?)(?:; \S+ \d+(?:\.\d+)?)*""").matches(description))
+        return ""
+    val str = description.replace(Regex("[;]"), "").split(" ")
+    var rez = str[0]
+    var maxVal = 0.0
+    for (i in 1 until str.size step 2) {
+        if (maxVal < str[i].toDouble()) {
+            rez = str[i - 1]
+            maxVal = str[i].toDouble()
         }
-        return rez
-    } else return ""
+    }
+    return rez
 }
 
 /**

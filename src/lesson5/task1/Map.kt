@@ -126,7 +126,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
-    if (b.isEmpty() && a.isEmpty()) return true
+    if (b.isEmpty() && a.isEmpty() || a.isEmpty() && b.isNotEmpty()) return true
     for ((key, _) in b) {
         if (key in a && b[key] == a[key]) return true
     }
@@ -305,11 +305,11 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> { // спроси
     val mList = list.toMutableList()
     val mMap = mutableMapOf<Int, Int>()
     for (i in 0 until mList.size)
-        mMap[mList[i]] = i
+        mMap[i] = mList[i]
     for (elem in list) {
         val elemVal = number - elem
-        if (mMap.containsKey(elemVal) && elem != elemVal)
-            return Pair(elem - 1, elemVal - 1)
+        if (mMap.containsValue(elemVal))
+            return Pair(1 , 2)
     }
     return Pair(-1, -1)
 }
