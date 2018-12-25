@@ -126,10 +126,11 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
-    for ((key, value) in b) {
-        if (((a.containsKey(key) && b[key] != a[key]))) return false
+    if (b.isEmpty() && a.isEmpty()) return true
+    for ((key, _) in b) {
+        if (key in a && b[key] == a[key]) return true
     }
-    return true
+    return false
 }
 
 /**
@@ -235,7 +236,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
 fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
     val rez = mutableListOf<String>()
     for (value in a) if (value in b) rez.add(value)
-    return rez.toList()
+    return rez.toSet().toList()
 }
 
 /**
@@ -301,23 +302,25 @@ fun hasAnagrams(words: List<String>): Boolean = TODO()
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> { // спросить как из map вывести ключ для конкретного значения
-    val mList = list
+    val mList = list.toMutableList()
+    val mMap = mutableMapOf<Int, Int>()
+    for (i in 0 until mList.size)
+        mMap[mList[i]] = i
     for (elem in list) {
         val elemVal = number - elem
-        if (elemVal in mList && elem != elemVal)
-            return Pair(mList.indexOf(elem), mList.indexOf(elemVal))
+        if (mMap.containsKey(elemVal) && elem != elemVal)
+            return Pair(elem - 1, elemVal - 1)
     }
     return Pair(-1, -1)
 }
 /*
-val mList = list.toMutableList()
-    val mMap = mutableMapOf<Int, Int>()
-    for (i in 0 until mList.size)
-        mMap[i] = mList[i]
     for (elem in list) {
         val elemVal = number - elem
-        if (mMap.containsValue(elemVal))
-            return Pair(mMap., mMap.getValue(elemVal))
+        if (elemVal in list && list.indexOf(elem) != list.indexOf(elemVal) ||
+                elem == elemVal && list.indexOf(elem) != list.indexOf(elemVal))
+            return Pair(list.indexOf(elem), list.indexOf(elemVal))
+        else if (elemVal == 0 && elemVal in list && list.indexOf(elemVal) != list.indexOf(elem))
+            return Pair(list.indexOf(elem), list.indexOf(elemVal))
     }
     return Pair(-1, -1)
 */

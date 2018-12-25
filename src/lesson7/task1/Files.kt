@@ -276,20 +276,19 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     var maxVal = 0
     for (word in Regex("""([A-Za-zА-ЯЁа-яё]+)""").findAll(reader.toLowerCase()))
         listFromText += word.value
-    val mapOfUnigueWords = mutableMapOf<Int, String>()
-    val listOfUnigueWords = mutableListOf<String>()
+    val mapOfUniWords = mutableMapOf<Int, String>()
+    val listOfUniWords = mutableListOf<String>()
     for (wordVal in listFromText) {
         val uniqueWord = wordVal.toSet()
         if (wordVal.length == uniqueWord.size)
-            listOfUnigueWords += wordVal
+            listOfUniWords += wordVal
     }
-    for (word in listOfUnigueWords) 
-        mapOfUnigueWords + Pair(word.length, word)
-    for (i in mapOfUnigueWords)
-        if (i.key < maxVal)
+    for (word in listOfUniWords)
+        mapOfUniWords += Pair(word.length, word)
+    for (i in mapOfUniWords)
+        if (i.key > maxVal)
             maxVal = i.key
-    writer.write(mapOfUnigueWords[maxVal])
-
+    writer.write(mapOfUniWords[maxVal])
 }
 
 /**

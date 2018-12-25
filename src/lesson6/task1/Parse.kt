@@ -133,7 +133,7 @@ fun dateDigitToStr(digital: String): String {
         val year = list.last().toInt()
         val day = list.first().toInt()
         if (day !in 1..daysInMonth(monthNum, year) || list.size != 3 || monthNum !in 1..12) return ""
-        return String.format("%2d %s %4d", day, month, year).trim()
+        return String.format("%2d %s %4d", day, month, year).replace(Regex("""\s+"""), " ").trim()
     } catch (e: java.lang.NumberFormatException) {
         return ""
     }
@@ -191,10 +191,10 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки вернуть -1.
  */
 fun bestHighJump(jumps: String): Int {
-    var str = jumps.split("")
+    val str = jumps.split(" ")
     var rez = -1
     for (i in 0 until str.size) {
-        if (str[i].matches(Regex("""\a?\d+\a?""")) && str[i + 1].matches(Regex("[+]")))
+        if (str[i].matches(Regex("""\a?\d+\a?""")) && str[i + 1].matches(Regex("[+]")) && str[i].toInt() > rez)
             rez = str[i].toInt()
     }
     return rez
@@ -249,8 +249,12 @@ fun mostExpensive(description: String): String {
     if (description.matches(Regex("""[а-яёА-ЯЁ]+ \d+\.\d?(; [а-яёА-ЯЁ]+ \d+\.\d?)*"""))) {
         val str = description.replace(Regex("[;]"), "").split(" ")
         var rez = str[0]
-        for (i in 1 until str.size) {
-            if (str[i].toInt() < str[i + 2].toInt()) rez = str[i + 1]
+        var maxVal = 0.0
+        for (i in 1 until str.size step 2) {
+            if (maxVal < str[i].toDouble()) {
+                rez = str[i - 1]
+                maxVal = str[i].toDouble()
+            }
         }
         return rez
     } else return ""
