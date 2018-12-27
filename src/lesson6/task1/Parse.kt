@@ -194,7 +194,7 @@ fun bestHighJump(jumps: String): Int {
     val str = jumps.split(" ")
     var rez = -1
     for (i in 0 until str.size) {
-        if (str[i].matches(Regex("""\a?\d+\a?""")) && str[i + 1].matches(Regex("""\%?\+\%?""")) && str[i].toInt() > rez)
+        if (str[i].matches(Regex("""\a?\d+\a?""")) && str[i + 1].matches(Regex("""\%*\+\%*""")) && str[i].toInt() > rez)
             rez = str[i].toInt()
     }
     return rez

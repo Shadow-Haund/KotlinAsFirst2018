@@ -121,16 +121,30 @@ fun sibilants(inputName: String, outputName: String) {
  *
  *
  * Следующие правила должны быть выполнены:
- * 1) Пробелы в начале и в конце всех строк не следует сохранять.
+ * 1) Пробелы в начале и в конце всех строк не следует сохраня  ть.
  * 2) В случае невозможности выравнивания строго по центру, строка должна быть сдвинута в ЛЕВУЮ сторону
  * 3) Пустые строки не являются особым случаем, их тоже следует выравнивать
  * 4) Число строк в выходном файле должно быть равно числу строк во входном (в т. ч. пустых)
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+    val reader = File(inputName).readLines()
+    val writer = File(outputName).bufferedWriter()
+    val listOfTrim = mutableListOf<String>()
+    for (line in reader)
+        listOfTrim += line.trim()
+    val maxLine = listOfTrim.maxBy { it.length }
+    var rezLine: String
+    for (line in listOfTrim) {
+        val numOfSpace = maxLine!!.length - line.length
+        rezLine = " ".repeat((numOfSpace) / 2)
+        writer.write("$rezLine$line")
+        writer.newLine()
+    }
+    writer.close()
 }
-
+/*
+*/
 /**
  * Сложная
  *
@@ -242,8 +256,52 @@ fun top20Words(inputName: String): Map<String, Int> {
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
-    TODO()
+    val reader = File(inputName).readText().toCharArray()
+    val writer = File(outputName).bufferedWriter()
+    dictionary.toMutableMap() += Pair(' ', " ")
+    val map = mutableMapOf<Char, String>()
+    for ((key, value) in dictionary) {
+        map += Pair(key.toLowerCase(), value.toLowerCase())
+    }
+    for (i in reader)
+        if (Regex("[A-ZА-ЯЁ]").matches(i.toString()))
+            if (map.containsKey(i.toLowerCase())) writer.write(map[i.toLowerCase()]!!.capitalize())
+            else writer.write(i.toString().capitalize())
+        else
+            if (map.containsKey(i.toLowerCase())) writer.write(map[i.toLowerCase()])
+            else writer.write(i.toString())
+    writer.close()
 }
+/*
+    for (i in reader) {
+        if (i.toString().matches(Regex("""[A-ZА-ЯЁ]""")))
+            if (map.containsKey(i.toLowerCase())) writer.write(map[i]!!.capitalize())
+            else writer.write(i.toString().capitalize())
+        else
+            if (map.containsKey(i.toLowerCase())) writer.write(map[i]!!.toLowerCase())
+            else writer.write(i.toString().toLowerCase())
+    }
+    writer.close()
+
+*/
+/*
+val reader = File(inputName).readLines()
+    val writer = File(outputName).bufferedWriter()
+    dictionary.toMutableMap() += Pair(' ', " ")
+    val map = mutableMapOf<Char,String>()
+    for ((key, value) in dictionary) {
+        map += Pair(key.toLowerCase(), value.toLowerCase())
+    }
+    val rez = mutableListOf<String>()
+    for (line in reader) {
+        val sLine = line.toCharArray().toMutableList()
+        for (i in sLine) {
+            if (map.containsKey(i)) rez.add(dictionary[i]!!)
+            val r =rez.joinToString ()
+        }
+        File(outputName).writeText(r)
+    }
+ */
 
 /**
  * Средняя
