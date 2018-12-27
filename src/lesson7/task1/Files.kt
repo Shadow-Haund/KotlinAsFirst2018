@@ -328,16 +328,16 @@ val reader = File(inputName).readLines()
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
-    val reader = File(inputName).readText()
+    val reader = File(inputName).readLines()
     val writer = File(outputName).bufferedWriter()
     val listFromText = mutableListOf<String>()
     var maxVal = 0
-    for (word in Regex("""([A-Za-zА-ЯЁа-яё]+)""").findAll(reader.toLowerCase()))
-        listFromText += word.value
+    for (word in reader)
+        listFromText += word
     val listOfRezWords = mutableListOf<String>()
     val listOfUniWords = mutableListOf<String>()
-    for (wordVal in listFromText) {
-        val uniqueWord = wordVal.toSet()
+    for (wordVal in reader) {
+        val uniqueWord = wordVal.toLowerCase().toSet()
         if (wordVal.length == uniqueWord.size)
             listOfUniWords += wordVal
     }
@@ -350,7 +350,7 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
             listOfRezWords.add(word)
 
     }
-    writer.write(listOfRezWords.joinToString { it.capitalize() })
+    writer.write(listOfRezWords.joinToString())
     writer.close()
 }
 
