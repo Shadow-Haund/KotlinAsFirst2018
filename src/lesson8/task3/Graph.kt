@@ -69,3 +69,32 @@ class Graph {
                 if (min == null) null else min + 1
             }
 }
+
+data class Disc(var num: Double, var str: String) {
+    fun addition(another: Disc): Double = num + another.num
+
+    fun subtraction(another: Disc): Double = num - another.num
+
+    fun multiplication(another: Double): Double = num * another
+
+    fun division(number: Double): Double = num / number
+
+    fun divisionWithDisc(another: Disc): Double = num / another.num
+
+    fun comparison(another: Disc): Boolean = num == another.num
+}
+
+fun mainOperation(one: Disc, another: Disc, number: Double, condition: String) {
+    if (condition == "Сложить" && one.str == another.str)
+        one.addition(another)
+    if (condition == "Вычесть" && one.str == another.str)
+        one.subtraction(another)
+    if (condition == "Умножить")
+        one.multiplication(number)
+    if (condition == "Разделить")
+        one.division(number)
+    if (condition == "Разделить с описанием" && one.str == another.str)
+        one.divisionWithDisc(another)
+    if (condition == "Сравнение" && one.str == another.str)
+        one.comparison(another)
+}
