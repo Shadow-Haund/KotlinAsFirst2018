@@ -4,6 +4,30 @@ package lesson7.task1
 
 import java.io.File
 
+fun foo(inputName: String, query: String): List<String> {
+    val reader = File(inputName).readLines()
+    val queryParts = query.split(" ")
+    val mapQ = queryParts.toMutableList().removeAt(0)
+    val mapV = queryParts.toMutableList().removeAt(1)
+    val list = mutableListOf<String>()
+    val rList = mutableListOf<String>()
+    for (i in 0 until reader.size)
+        list += reader[i].split(": ")
+    for (i in 1..list.size step 2) {
+        val varSr = mutableListOf<String>()
+        if (list[i].contains(Regex("$mapQ"))) {
+            varSr += list[i].split(", ")
+                    .joinToString(" ")
+                    .split(" ")
+            for (j in 1..varSr.size step 2)
+                if (varSr[j - 1] == mapQ && varSr[j].toInt() >= mapV.toInt())
+                    rList += list[i - 1]
+        }
+    }
+    return rList
+}
+
+
 /**
  * Пример
  *
@@ -25,7 +49,6 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
                 outputStream.newLine()
                 currentLineLength = 0
             }
-            continue
         }
         for (word in line.split(" ")) {
             if (currentLineLength > 0) {
@@ -128,18 +151,16 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    val reader = File(inputName).readLines()
+    val lines = File(inputName).readLines().map { it.trim() }
     val writer = File(outputName).bufferedWriter()
-    val listOfTrim = mutableListOf<String>()
-    for (line in reader)
-        listOfTrim += line.trim()
-    val maxLine = listOfTrim.maxBy { it.length }
-    var rezLine: String
-    for (line in listOfTrim) {
-        val numOfSpace = maxLine!!.length - line.length
-        rezLine = " ".repeat((numOfSpace) / 2)
-        writer.write("$rezLine$line")
-        writer.newLine()
+    if (lines.isNotEmpty()) {
+        val maxL = lines.maxBy { it.length }!!.length
+        val linesCount = lines.size
+        lines.withIndex().forEach {
+            writer.write(" ".repeat((maxL - it.value.trim().length) / 2))
+            writer.write(it.value.trim())
+            if (it.index < linesCount) writer.newLine()
+        }
     }
     writer.close()
 }
@@ -173,7 +194,23 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    val outputStream = File(outputName).bufferedWriter()
+    val longestLineLength = (File(inputName).readLines().map { it.trim() }.maxBy { it.length } ?: "").length
+    for (line in File(inputName).readLines().map { it.trim() }) {
+        val words = Regex("""\s+""").split(line)
+        val lastIndex = words.lastIndex
+        if (lastIndex < 1 || words.joinToString(" ").length == longestLineLength)
+            outputStream.write(line)
+        else {
+            val space = longestLineLength - words.joinToString("").length
+            val everySpace = space / lastIndex
+            val rest = space % lastIndex
+            for ((index, word) in words.withIndex())
+                outputStream.write(word + if (index != lastIndex) " ".repeat(everySpace + if (index < rest) 1 else 0) else "")
+        }
+        outputStream.newLine()
+    }
+    outputStream.close()
 }
 
 /**
@@ -258,7 +295,6 @@ fun top20Words(inputName: String): Map<String, Int> {
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
     val reader = File(inputName).readText().toCharArray()
     val writer = File(outputName).bufferedWriter()
-    dictionary.toMutableMap() += Pair(' ', " ")
     val map = mutableMapOf<Char, String>()
     for ((key, value) in dictionary) {
         map += Pair(key.toLowerCase(), value.toLowerCase())

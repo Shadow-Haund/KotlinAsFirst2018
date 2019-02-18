@@ -14,6 +14,17 @@ class Tests {
     }
 
     @Test
+    fun foo() {
+        var res = foo("input/foo.txt", "комната 20")
+        assertEquals(listOf("Железнодорожная 3-6"), res)
+        res = foo("input/foo.txt", "кухня 9")
+        assertEquals(listOf("Садовая 19-1-15"), res)
+        res = foo("input/foo.txt", "комната 18")
+        assertEquals(listOf("Пионерская 9-17", "Школьная 12-14", "Садовая 19-1-55", "Железнодорожная 3-6"), res)
+    }
+
+
+    @Test
     @Tag("Example")
     fun alignFile() {
         alignFile("input/align_in1.txt", 50, "temp.txt")
