@@ -63,4 +63,9 @@ class Tests {
         assertEquals(1, graph.dfs("H", "G"))
         assertEquals(-1, graph.dfs("H", "A"))
     }
+
+    @Test
+    fun mainOperation() {
+
+    }
 }

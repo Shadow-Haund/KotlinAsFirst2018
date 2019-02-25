@@ -84,17 +84,32 @@ data class Disc(var num: Double, var str: String) {
     fun comparison(another: Disc): Boolean = num == another.num
 }
 
-fun mainOperation(one: Disc, another: Disc, number: Double, condition: String) {
-    if (condition == "Сложить" && one.str == another.str)
-        one.addition(another)
-    if (condition == "Вычесть" && one.str == another.str)
-        one.subtraction(another)
-    if (condition == "Умножить")
-        one.multiplication(number)
-    if (condition == "Разделить")
-        one.division(number)
-    if (condition == "Разделить с описанием" && one.str == another.str)
-        one.divisionWithDisc(another)
-    if (condition == "Сравнение" && one.str == another.str)
-        one.comparison(another)
+fun mainOperation(receive: String, one: Disc, another: Disc, number: Double) {
+    val rec = "   5 кг   "
+    if (rec.matches(Regex("""\s*\d+\s+[а-яА-ЯёЁ]+\s*"""))) {
+        Regex("""\s+""").replace(receive, " ").trim()
+        val per = rec.split(" ")
+        one.num = per[0].toDouble()
+        one.str = per[1]
+        another.num = 5.0
+        another.str = "кг"
+        val condition = "+"
+        if (condition == "+" && one.str == another.str)
+            one.addition(another)
+        if (condition == "-" && one.str == another.str)
+            one.subtraction(another)
+        if (condition == "*")
+            one.multiplication(number)
+        if (condition == "/")
+            one.division(number)
+        if (condition == "//" && one.str == another.str)
+            one.divisionWithDisc(another)
+        if (condition == "==" && one.str == another.str)
+            one.comparison(another)
+    } else throw IllegalArgumentException("Неверный формат ввода")
 }
+
+fun main(args: Array<String>) {
+    return mainOperation
+}
+
