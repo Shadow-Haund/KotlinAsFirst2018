@@ -102,7 +102,7 @@ data class Segment(val begin: Point, val end: Point) {
 /**
  * Средняя
  *
- * Дано множество точек. Вернуть отрезок, соединяющий две наиболее удалённые из них.
+ * Дано множество точек. Вернуть отрезок, соединяюtriangleAreaщий две наиболее удалённые из них.
  * Если в множестве менее двух точек, бросить IllegalArgumentException
  */
 fun diameter(vararg points: Point): Segment = TODO()
@@ -163,7 +163,7 @@ fun lineByPoints(a: Point, b: Point): Line = TODO()
 
 /**
  * Сложная
- *
+ *8
  * Построить серединный перпендикуляр по отрезку или по двум точкам
  */
 fun bisectorByPoints(a: Point, b: Point): Line = TODO()

@@ -64,8 +64,22 @@ class Tests {
         assertEquals(-1, graph.dfs("H", "A"))
     }
 
+
+}
+
+class Test {
     @Test
-    fun mainOperation() {
+    fun filftyfuck(){
+
+        assertEquals("14539.718 кг", fuck(" 231.2458 кг * 62.8756 г"))
+        assertEquals("10.0 кг", fuck(" 5 кг + 5 кг"))
+        assertEquals("7.0 кг", fuck("70 кг - 63 кг"))
+        assertEquals("7.0 кг", fuck("70 кг / 10 кг"))
+        assertEquals("28.0 кг", fuck("7 кг * 4 кг"))
+        assertEquals("7.0 кг", fuck("35 кг ~ 5 кг"))
+        assertEquals(false, fuck("7 кг = 4 кг"))
+        assertEquals(true, fuck("4 кг = 4 кг"))
 
     }
 }
+
